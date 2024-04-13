@@ -1,0 +1,123 @@
+<html lang="en">  
+<head>  
+    <meta charset="utf-8" />  
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />  
+    <title>xy1</title>  
+  
+    <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />  
+    <script src="https://js.arcgis.com/4.29/"></script>  
+  
+    <style>  
+        body, html {    
+            height: 100%;    
+            margin: 0;    
+            padding: 0;    
+        }    
+        #viewDiv {  
+            padding: 0;  
+            margin: 0;  
+            height: 100%;  
+            width: 100%;  
+        }  
+        #header {    
+            height: 50px;   
+            background-color: #D3D3D3;   
+            text-align: center;    
+            line-height: 50px;   
+        }    
+        #basemapGalleryDiv {    
+            height: 100px;   
+            background-color: #1CC7AE;   
+            overflow: auto;   
+            
+        }
+        .esri-scale-bar {  
+            position: absolute;  
+            bottom: 10px; 
+            left: 10px; 
+            z-index: 5;  
+        }    
+    
+        main {    
+            display: flex;    
+            flex-direction: column;    
+            height: calc(100% - 50px);   
+        }    
+    </style>  
+  
+    <script>  
+        require([  
+            "esri/Map",  
+            "esri/views/MapView",  
+            "esri/layers/FeatureLayer",  
+            "esri/widgets/BasemapGallery",
+            "esri/widgets/ScaleBar",
+            "esri/widgets/Legend",
+            "esri/widgets/Search",
+            "esri/widgets/LayerList" 
+        ], (Map, MapView, FeatureLayer, BasemapGallery,ScaleBar,Legend,Search,LayerList) => {   
+            const featureLayer = new FeatureLayer({  
+                url: "https://www.geosceneonline.cn/server/rest/services/Hosted/zxy111/FeatureServer/0"  
+            });       
+  
+            const map = new Map({  
+                basemap: "hybrid"  
+            });  
+            map.add(featureLayer);  
+  
+            const view = new MapView({  
+                map: map,  
+                container: "viewDiv",  
+                zoom: 5,  
+                center: [-100, 35]  
+            });  
+
+
+
+            const scaleBar = new ScaleBar({
+             view: view,
+             unit: "imperial"
+             });
+             view.ui.add(scaleBar, {
+             position: "bottom-left"
+             });
+
+            var legend = new Legend({  
+             view: view  
+             });  
+             view.ui.add(legend, "top-right");
+
+            var search = new Search({  
+             view: view  
+             });  
+             view.ui.add(search, "top-left"); 
+
+            var layerList = new LayerList({  
+             view: view  
+             });  
+             view.ui.add(layerList, "bottom-right");
+            
+            var basemapGallery = new BasemapGallery({    
+                view: view,    
+                container: "basemapGalleryDiv",
+                visibleBasemaps: ["topo-vector", "satellite", "streets-night-vector"]    
+            });    
+            basemapGallery.startup();
+
+
+
+
+
+             
+        });  
+    </script>  
+</head>  
+  
+<body>  
+    <header id="header"> Map</header>    
+    <main>    
+        <div id="viewDiv"></div>  
+        <div id="basemapGalleryDiv"></div>
+    </main>    
+</body>  
+<html>
