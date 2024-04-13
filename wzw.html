@@ -1,0 +1,119 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>Intro to MapView - Create a 2D map | Sample | ArcGIS Maps SDK for JavaScript 4.29</title>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+        #header {
+            height: 50px;
+            width: 100%;
+            background-color: rgb(188, 198, 231);
+        }
+
+        #header span {
+            font-size: 20px;
+            line-height: 45px;
+        }
+      }
+    </style>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.29/"></script>
+
+    <script>
+      require(["esri/Map", "esri/views/MapView","esri/layers/MapImageLayer","esri/widgets/Legend","esri/widgets/ScaleBar","esri/widgets/LayerList",
+      "esri/widgets/Search","esri/widgets/BasemapGallery","esri/widgets/CoordinateConversion","esri/widgets/DistanceMeasurement2D"], 
+
+      (Map, MapView,MapImageLayer,Legend,ScaleBar,LayerList,Search,BasemapGallery,CoordinateConversion,DistanceMeasurement2D) => {
+        var ilayer=new MapImageLayer({url:"https://www.geosceneonline.cn/server/rest/services/USA城市人口变化/MapServer"});
+        const map = new Map({
+          basemap: "oceans",
+          layers:[ilayer]
+        });
+        
+
+        const view = new MapView({
+          container: "viewDiv",
+          map: map,
+          zoom: 4,
+          center: [260, 35] // longitude, latitude
+        });
+        let legend = new Legend({
+       view: view,
+       layerInfos:[{
+      layer:ilayer,
+      title:"人口总数"
+       }]
+         });
+     view.ui.add(legend, "bottom-left");
+     let scaleBar = new ScaleBar({
+      view: view,
+      style:"ruler",
+      unit:"metric"
+  });
+    // Add widget to the bottom left corner of the view
+   view.ui.add(scaleBar, {
+  position: "bottom-right"
+   });
+   let layerList = new LayerList({
+  view: view
+});
+// Adds widget below other elements in the top left corner of the view
+view.ui.add(layerList, {
+  position: "top-left"
+});
+const searchWidget = new Search({
+  view: view
+});
+// Adds the search widget below other elements in
+// the top left corner of the view
+view.ui.add(searchWidget, {
+  position: "top-right",
+  index: 2
+});
+let basemapGallery = new BasemapGallery({
+  view: view
+});
+// Add widget to the top right corner of the view
+view.ui.add(basemapGallery, {
+  position: "top-right"
+});
+let ccWidget = new CoordinateConversion({
+  view: view
+});
+
+// Adds widget in the bottom left corner of the view
+view.ui.add(ccWidget, "top-left");
+
+
+// To add the DistanceMeasurement2D widget to the map
+let measurementWidget = new DistanceMeasurement2D({
+  view: view
+});
+view.ui.add(measurementWidget, "top-right");
+
+// Create a new instance of sketch widget and set its required parameters
+let sketch = new Sketch({
+  layer: graphicsLayer,
+  view: view
+});
+
+});
+    </script>
+  </head>
+
+  <body>
+   <div id="header">
+    <span>美国城市人口数量变化</span>
+   </div>
+    </div>
+    <div id ="viewDiv"></div>
+  </body>
+</html>
