@@ -1,0 +1,189 @@
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>My Map</title>
+ <style>
+    html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#header {
+  height: 50px;
+  background-color: #0079c1;
+  color: #fff;
+  text-align: center;
+  line-height: 50px;
+}
+
+#map {
+  float: left;
+  width: 100%;
+  height: calc(100% - 50px);
+}
+
+#basemapGallery {
+  top: 10px;
+  right: 0;
+  height: calc(100% - 50px);
+  z-index: 1;
+}
+
+
+#widgets {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 1;
+}
+
+#scalebar {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 1;
+}
+
+#legend {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 1;
+}
+
+#layerlist {
+  display: none;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 1;
+}
+
+#layerlist-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  background-color: #0079c1;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+#layerlist-btn:hover {
+  background-color: #005fa3;
+}
+
+.gradient-button {
+  background-color: #0281cb;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.gradient-button:hover {
+  background-color: #171d22;
+}
+
+</style>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.29/"></script>
+  <link rel="stylesheet" href="style.css">
+
+  <script>
+    require([
+      "esri/config",
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/widgets/ScaleBar",
+      "esri/widgets/Legend",
+      "esri/widgets/Search",
+      "esri/widgets/BasemapGallery",
+      "esri/widgets/LayerList",
+      "esri/widgets/Expand",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Measurement",
+    ], function (esriConfig, Map, MapView, ScaleBar, Legend, Search, BasemapGallery, LayerList, Expand, FeatureLayer, Measurement) {
+
+      esriConfig.apiKey = "AAPK26c7ce22b8ab4fe0b92e7b156bfce96eh-35hVQmloNiaphiX_AnI2eTYQ3Xu788AC9rXVH8gEkD4lioc8wqm1NMfCSDfQFM";
+
+      const map = new Map({
+        basemap: "hybrid" // basemap styles service
+      });
+
+      const view = new MapView({
+        map: map,
+        center: [-110, 35], // Longitude, latitude of Shenzhen
+        zoom: 12, // Zoom level
+        container: "map" // Div element
+      });
+
+      const scaleBar = new ScaleBar({
+        view: view
+      });
+
+      const legend = new Legend({
+        view: view
+      });
+
+      const search = new Search({
+        view: view
+      });
+
+      const basemapGallery = new BasemapGallery({
+        view: view
+      });
+
+      const layerList = new LayerList({
+        view: view
+      });
+
+      const featureLayer = new FeatureLayer({
+        url: "https://www.geosceneonline.cn/server/rest/services/Hosted/吴荣鑫data/FeatureServer"
+      });
+
+
+      view.ui.move("zoom", "bottom-right");
+      view.ui.add(scaleBar, "bottom-right");
+      view.ui.add(search, "top-right");
+      view.ui.add(basemapGallery, "top-left");
+      view.ui.add(legend, "bottom-right"); // 添加图例
+
+      map.add(featureLayer);
+
+      let measurement = null;
+      let measurementExpand = null;
+
+  
+
+      const measureButton = document.getElementById("measureButton");
+      measureButton.addEventListener("click", addMeasurementWidget);
+
+    });
+    const apiKey = "AAPK26c7ce22b8ab4fe0b92e7b156bfce96eh-35hVQmloNiaphiX_AnI2eTYQ3Xu788AC9rXVH8gEkD4lioc8wqm1NMfCSDfQFM";
+    const authentication = ApiKeyManager.fromKey(apiKey);
+
+
+  </script>
+
+</head>
+
+<body>
+  <div id="header"><strong>美国</strong></div>
+  <div id="map"></div>
+  <div id="basemapGallery"></div>
+  <div id="widgets">
+    <div id="scalebar" class="esri-widget"></div>
+    <!-- <div id="legend" class="esri-widget"></div> -->
+    <div id="search" class="esri-widget"></div>
+
+  </div>
+</body>
+
+</html>
+
