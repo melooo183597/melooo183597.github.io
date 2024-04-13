@@ -1,0 +1,115 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>zxy</title>
+    <style>
+        html,
+        body,
+        #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%-50px;
+            width: 100%;
+        }
+
+        #header {
+            height: 50px;
+            width: 100%;
+            background-color: pink;
+        }
+
+        #header span {
+            font-size: 40px;
+            line-height: 50px;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.29/"></script>
+
+    <script>
+        require(["esri/Map",
+            "esri/views/MapView",
+            "esri/layers/FeatureLayer",
+            "esri/widgets/ScaleBar",
+            "esri/widgets/LayerList",
+            "esri/widgets/Legend",
+            "esri/widgets/Search"
+
+
+        ], (Map, MapView, FeatureLayer, ScaleBar, LayerList, Legend, Search) => {
+
+            const layer = new FeatureLayer({
+                // URL to the service
+                url: "https://www.geosceneonline.cn/server/rest/services/Hosted/zxy111_查看/FeatureServer/0"
+            });
+            const map = new Map({
+                basemap: "hybrid",
+                layers: [layer]
+            });
+            const view = new MapView({
+                container: "viewDiv",
+                map: map,
+                zoom: 6,
+                center: [-100, 35] // longitude, latitude
+            });
+
+            let scaleBar = new ScaleBar({
+                view: view,
+                style: "ruler",
+                unit: "metric"
+            });
+            // Add widget to the bottom left corner of the view
+            view.ui.add(scaleBar, {
+                position: "bottom-left",
+
+            });
+
+
+
+            let legend = new Legend({
+                view: view,
+
+                layer: "layer"
+            });
+
+            view.ui.add(legend, "bottom-right");
+
+
+            let layerList = new LayerList({
+                view: view
+            });
+            // Adds widget below other elements in the top left corner of the view
+            view.ui.add(layerList, {
+                position: "bottom-right"
+            });
+
+
+            const searchWidget = new Search({
+                view: view
+            });
+            // Adds the search widget below other elements in
+            // the top left corner of the view
+            view.ui.add(searchWidget, {
+                position: "top-right",
+                index: 2
+            });
+
+
+
+        });
+       
+
+    </script>
+</head>
+
+<body>
+    <div id="header">
+        <span>美国公共事件</span>
+    </div>
+    <div id="viewDiv"></div>
+</body>
+
+</html>
